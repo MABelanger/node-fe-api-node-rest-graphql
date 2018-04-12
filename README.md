@@ -48,6 +48,10 @@ $ httpie localhost:3000
 $ curl -X GET -v localhost:3000
 ```
 
+## mongodb
+https://mlab.com/ -> create an account and get an URL of mongodb://...
+or install mongodb locally.
+
 ## get post put delete ... (all)
 ```js
 // the all do all REST verb
@@ -92,5 +96,20 @@ app.get('/api/users/:id', function(request, response, next) {
     if (error) return next(error);
     return response.render('user', user);
   });
+});
+```
+
+#### express.Router().route()
+It's chain able
+```js
+app.route('/')
+		.get(userController.getAll)
+		.post(userController.createOne)
+```
+It's a shortcut of app.get('/',...) and app.post('/'...)
+
+```js
+app.get('/', userController.getAll);
+app.post('/', userController.createOne);
 });
 ```
