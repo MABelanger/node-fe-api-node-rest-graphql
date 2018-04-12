@@ -1,14 +1,14 @@
 import express from 'express';
 
+import { router } from './api'
+import db from './db'
+
 let app = express();
 
 const apiRouter = express.Router();
+db.connect();
 
-// GET -> /api = {api: true}
-apiRouter.get('/', (req, res) => res.json({api: true}));
-
-// Mount it to the root app.
-app.use('/api', apiRouter);
+app.use('/api', router);
 
 // GET -> / = {root: true}
 app.get('/', (req, res) => res.json({root: true}));
