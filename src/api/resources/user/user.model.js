@@ -1,5 +1,14 @@
 import mongoose from 'mongoose'
 
+// avoid error : Cannot overwrite `user` model once compiled.
+function _getModel(modelName, schema) {
+  if (mongoose.models[modelName]) {
+    return mongoose.model(modelName);
+  } else {
+    return mongoose.model(modelName, schema);
+  }
+}
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -26,4 +35,5 @@ userSchema.methods = {
   }
 }
 
-export const User = mongoose.model('user', userSchema)
+export const User = _getModel('user', userSchema);
+// mongoose.model('user', userSchema)
