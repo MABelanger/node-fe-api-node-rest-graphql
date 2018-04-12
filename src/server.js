@@ -1,9 +1,16 @@
 import express from 'express';
 
-const app = express()
+let app = express();
 
-app.get('/', (req, res) => {
-  res.json({ok: true})
-})
+const apiRouter = express.Router();
 
-export default app
+// GET -> /api = {api: true}
+apiRouter.get('/', (req, res) => res.json({api: true}));
+
+// Mount it to the root app.
+app.use('/api', apiRouter);
+
+// GET -> / = {root: true}
+app.get('/', (req, res) => res.json({root: true}));
+
+export default app;
