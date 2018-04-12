@@ -74,3 +74,23 @@ apiRouter.get('/', (req, res) => res.json({api: true}));
 // Mount it to the root app.
 app.use('/api', apiRouter);
 ```
+
+#### express.Router().param()
+If inside the url /:id, execute function userController.findByParam(req, res, next, id)
+
+express.Router().param('id', userController.findByParam)
+
+Anytime the given string (e.g., id ) is present in the URL pattern of the route, and server receives a request that matches that route, the callback to the app.param() will be triggered. For example, with app.param('id', function(req, res, next, id){...}) and app.get('/users/:id', findUser) every time we have a request /id/1 or /id/2 , the closure in app.param() will be executed (before findUser).
+
+The app.param() method is very similar to app.use() but it provides the value ( id in our example) as the fourth, last parameter, to the function. In this snippet, the id will have the value from the URL (e.g., 1 for /users/1):
+
+It replace the need of declaring the route explicitly with the :id
+```js
+app.get('/api/users/:id', function(request, response, next) {
+  var id = request.params.id;
+  userController.findByParam(id, function(error, user) {
+    if (error) return next(error);
+    return response.render('user', user);
+  });
+});
+```

@@ -1,6 +1,6 @@
-import express from 'express'
-import { userRouter } from './resources/user'
+import express from 'express';
+import { userRouter } from './resources/user';
 
-export const router = express.Router()
+export const router = express.Router();
 
-router.use('/user', userRouter)
+router.use('/users', userRouter);
