@@ -113,3 +113,67 @@ app.get('/', userController.getAll);
 app.post('/', userController.createOne);
 });
 ```
+
+### The controller
+router -> subRouter -> subRouter -> function... That function is the controller, it have in parameter the (req, res..., next) You can reuse controller in rest because each model doing the same thing CRUD...
+
+* Access to incoming request
+* Reuse controller as possible.
+* Async or Sync (should be async for prod)
+* Composable
+* Can respond with anything (json, file, asset, buffer, stream...)
+
+So any thing that respond, it's a controller. But it can be middleware to for example if you use authentication, the middleware can respond to.
+
+
+When you call createOne(model) you get function(req, res, next) ...
+```js
+export const createOne = (model) => (req, res, next) => {
+
+}
+
+// === function that return a function.
+function createOne(model){
+	return function (req, res, next) {
+
+	}
+}
+```
+
+The best to reuse controller is to generate it with the model. Example.
+
+```js
+export const generateControllers = (model, overrides = {}) => {
+  const defaults = {
+    findByParam: findByParam(model),
+    getAll: getAll(model),
+    getOne: getOne(model),
+    deleteOne: deleteOne(model),
+    updateOne: updateOne(model),
+    createOne: createOne(model)
+  }
+
+  return {...defaults, ...overrides}
+}
+```
+
+It's easier to test only one controller instead of each controller from each model.
+
+### The response
+```js
+// send watever you want and express will try to figure out
+// what it is .. (string, image, )
+res.send('hello')
+
+// Used with the REST API
+// set the application/JSON header HTTP
+// Usually you can wrap up an abstraction of the json message
+// to be consistent with the API.
+res.json({...})
+
+// change the status ex:. post request of 201
+res.status(201).json({...})
+
+// send the file back like html or templating
+res.sendFile('/path...')
+```
