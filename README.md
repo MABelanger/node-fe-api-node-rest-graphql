@@ -140,7 +140,7 @@ function createOne(model){
 }
 ```
 
-The best to reuse controller is to generate it with the model. Example.
+The best to reuse controller is to generate it with the model with meta programming that code generate code. You can overwrite the defaults generator with `overrides` Example.
 
 ```js
 export const generateControllers = (model, overrides = {}) => {
@@ -156,6 +156,7 @@ export const generateControllers = (model, overrides = {}) => {
   return {...defaults, ...overrides}
 }
 ```
+
 
 It's easier to test only one controller instead of each controller from each model.
 
@@ -176,4 +177,33 @@ res.status(201).json({...})
 
 // send the file back like html or templating
 res.sendFile('/path...')
+```
+
+### middleware
+Function that can be configured to run before the response is send back. (Analitic, authentification, log).
+
+You can put in the app or on the route like api to auth for example.
+
+* Has the same API as controllers
+* Use callback function to pass control to the next function in the middleware stack.
+* Great for
+	* Authenticating
+	* Enhancing request
+	* Logging
+* Can be mounted globally or on a per route basis
+* Do whatever you want
+
+The middleware always have the same signature (req, res, next). You can send error with next() But you need to catch the error somewhere in the application (error handling middleware)
+example :
+```js
+app.use('/api', (req, res, next) => {
+  console.log('hello from api');
+  next();
+}, router);
+```
+The signature of errorHandler is (error, req, res, next). Note that error is the first argument so nodeJs know that is an error handler. Node, trow error to next until the error handler catch it. Normaly the Error Handler filter the error and return the appropriate message to the user. At the end, you need to response with the appropriate message.
+```js
+export const apiErrorHandler = (error, req, res, next) => {
+
+}
 ```
