@@ -5,32 +5,33 @@ const testData = {message: 'hello'}
 export const controllers = {
   createOne(model, body) {
     console.log('createOne')
-    return Promise.resolve(testData)
+    return model.create(body);
   },
 
   updateOne(docToUpdate, update) {
     console.log('updateOne')
-    return Promise.resolve(testData)
+    merge(docToUpdate, update)
+    return docToUpdate.save();
   },
 
   deleteOne(docToDelete) {
     console.log('deleteOne')
-    return Promise.resolve(testData)
+    return docToDelete.remove();
   },
 
   getOne(docToGet) {
     console.log('getOne')
-    return Promise.resolve(testData)
+    return Promise.resolve(docToGet)
   },
 
   getAll(model) {
     console.log('getAll')
-    return Promise.resolve(testData)
+    return model.find({})
   },
 
   findByParam(model, id) {
     console.log('findByParam')
-    return Promise.resolve(testData);
+    return model.findById(id);
   }
 }
 
@@ -70,7 +71,7 @@ export const getOne = (model) => (req, res, next) => {
   // that suppose to only return docToGet
   return controllers.getOne(docToGet)
       .then(mongoDoc => res.status(200).json(mongoDoc))
-      .catch(error => next(errpr));
+      .catch(error => next(error));
 }
 
 // GET THE_RESOURCE/

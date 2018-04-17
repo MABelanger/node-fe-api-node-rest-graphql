@@ -193,7 +193,7 @@ You can put in the app or on the route like api to auth for example.
 * Can be mounted globally or on a per route basis
 * Do whatever you want
 
-The middleware always have the same signature (req, res, next). You can send error with next() But you need to catch the error somewhere in the application (error handling middleware)
+The middleware always have the same signature (req, res, next). It can be an array of function (middleware) You can send error with next() But you need to catch the error somewhere in the application (error handling middleware)
 example :
 ```js
 app.use('/api', (req, res, next) => {
@@ -207,3 +207,8 @@ export const apiErrorHandler = (error, req, res, next) => {
 
 }
 ```
+Make sure that errorHandler is always at the bottom, because it call next() so if the error happen after the errorHandler, the errorHandler will not receive it.
+
+
+### Persistance with mongodb and mongoose (ODM).
+With mongoose, you have schemas, validation, Quering API promises based, lifecycle hooks (onSave, onUpdate, on afterUpdate...), runtime join tables (populations). You can join per properties. it's not saved that way but when you retrieve the data, it's transparent.
