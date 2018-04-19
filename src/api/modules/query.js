@@ -26,12 +26,12 @@ export const controllers = {
 
   getAll(model) {
     console.log('getAll')
-    return model.find({})
+    return model.find({}).exec();
   },
 
   findByParam(model, id) {
     console.log('findByParam')
-    return model.findById(id);
+    return model.findById(id).exec();
   }
 }
 

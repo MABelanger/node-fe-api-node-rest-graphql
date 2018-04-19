@@ -212,3 +212,59 @@ Make sure that errorHandler is always at the bottom, because it call next() so i
 
 ### Persistance with mongodb and mongoose (ODM).
 With mongoose, you have schemas, validation, Quering API promises based, lifecycle hooks (onSave, onUpdate, on afterUpdate...), runtime join tables (populations). You can join per properties. it's not saved that way but when you retrieve the data, it's transparent.
+
+
+### Mongodb
+With Model you can do query. By default it return promises of mongo but you can convert it to native promise, it return a `mongo.query` object that you can execute with `.exec()` that convert to native promise. You have to `.exec()` for anything that start with `find...`
+```js
+/*
+ * By model
+ */
+/* To find */
+const song = Song.findById(id)
+	.where()
+	.limit()
+	.exec() // Execute the query...
+
+let promise = Song.findOne({name 'the_name'}).exec();
+
+/* To create */
+// Do not need to .exec() because is not start with find...
+Song.create({/* obj that satisfy the Schema */}) // OR
+
+let theSound = new Song({});
+theSound.save()
+
+/* To update */
+// The {new: true} is needed because otherwise it return the old object before the update.
+Song.findOneAndUpdate({name: 'oldName'}, {name: 'newName'}, {new: true}).exec(); // OR
+Song.findById(id, {name: 'other_name'}, {new: true}).exec(); // OR
+Song.findByIdAndRomove(id, {new: true}).exec();
+
+
+/*
+ * By Document
+ */
+ // if i have the document instead of the model i can overwrite it and then save()
+
+ song.name = 'newName';
+ const newSong = await song.save(); // OR
+ song.remove(); // OR
+ song.populate();
+
+```
+
+### config
+you can put secret inside .env file and use dotenv and add .env file to .gitignore
+
+
+### .env file
+```bash
+DB_HOST=localhost
+```
+
+### config.js file
+```js
+require('dotenv').config()
+process.env.DB_HOST,
+```

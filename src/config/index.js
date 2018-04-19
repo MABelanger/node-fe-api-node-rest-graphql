@@ -1,9 +1,8 @@
-import merge from 'lodash.merge'
+import merge from 'lodash.merge';
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+const env = process.env.NODE_ENV;
 
-const env = process.env.NODE_ENV
-
+// By default the config is baseConfig
 const baseConfig = {
   port: 3000,
   secrets: {},
@@ -12,16 +11,14 @@ const baseConfig = {
   }
 }
 
-let envConfig = {}
+// if NODE_ENV is set, overwrite the default rules.
+let envConfig = {};
 
+console.log('env', env);
 switch (env) {
   case 'development':
   case 'dev':
     envConfig = require('./dev').config
-    break;
-  default:
-    envConfig = require('./dev').config
 }
 
-
-export default merge(baseConfig, envConfig)
+export default merge(baseConfig, envConfig);
