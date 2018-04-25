@@ -268,3 +268,4 @@ DB_HOST=localhost
 require('dotenv').config()
 process.env.DB_HOST,
 ```
+You can also do a `env.sample` and put all the keys needed to be able to use it in `.env`
